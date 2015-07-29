@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>form-handler</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <link rel="stylesheet" href="css/form-handler.css">
+        <style>
+            body {
+                margin: 50px;
+                font-family: sans-serif;
+            }
+
+            .Wrap {
+                margin: 0 auto;
+                max-width: 1200px;
+            }
+
+            p {
+                position: relative;
+                margin: 0;
+                padding: 0 0 20px;
+            }
+
+            .textbox,
+            select {
+                border: 1px solid #969696;
+                padding: 0 0 0 12px;
+                height: 30px;
+                font-size: 16px;
+                color: #666;
+                border-radius: 2px;
+            }
+
+            .textbox[data-status~="invalid"],
+            select[data-status~="invalid"] {
+                border: 1px solid #990000;
+            }
+
+            .Button {
+                display: inline-block;
+                margin: 0 15px 10px 0;
+                background: #969696;
+                padding: 8px 12px;
+                color: #fff;
+                text-decoration: none;
+                transition: background-color .3s;
+                border-radius: 2px;
+            }
+
+                .Button:hover,
+                .Button:focus {
+                    background: #333;
+                }
+        </style>
+    </head>
+    <body>
+
+        <div class="Wrap">
+
+            <p>
+                <input name="name" type="text" class="textbox" placeholder="Name" title="Name" data-validation="required" data-regex="^.{0,50}$">
+                <span class="errorMessage required"><span>A full name is required</span></span>
+                <span class="errorMessage regex"><span>Please use less than 50 Characters.</span></span>
+
+            <p>
+                <input name="confirm-name" type="text" class="textbox" placeholder="Confirm Name" title="Confirm Name" data-match="name">
+                <span class="errorMessage match"><span>This field needs to match the `name` field.</span></span>
+
+            <p>
+                <input name="email" type="text" class="textbox" placeholder="Email" title="Email" data-validation="required email">
+                <span class="errorMessage required"><span>An email name is required</span></span>
+                <span class="errorMessage email"><span>A valid email name is required</span></span>
+
+            <p>
+                <select name="age" data-validation="required">
+                    <option value="">Choose your age...</option>
+                    <option>1-10</option>
+                    <option>11-20</option>
+                    <option>21+</option>
+                </select>
+                <span class="errorMessage all"><span>Please choose your age.</span></span>
+
+            <p data-toggle-show="age:21+" data-show="false">
+                <input type="checkbox" id="moreInfo"> <label for="moreInfo">Click here if you would like to receive more information.</label>
+
+            <p>
+                <input name="agree" id="agree" type="checkbox" data-validation="checked"> <label for="agree">I agree this information is correct.</label>
+                <span class="errorMessage all"><span>Please agree.</span></span>
+
+            <p data-toggle-show="agree:on" data-show="false">
+                <input name="sure" id="sure" type="checkbox" data-validation="checked" data-toggle-enable="agree:on"> <label for="sure">Are you sure?</label>
+                <span class="errorMessage all"><span>Please check.</span></span>
+
+            <p>
+                Where did you learn about us?
+                <input type="radio" name="learn" value="friends" data-validation="required" id="learn-friends"> <label for="learn-friends">Friends</label>
+                <input type="radio" name="learn" value="family" id="learn-family"> <label for="learn-family">Family</label>
+                <input type="radio" name="learn" value="internet" id="learn-internet"> <label for="learn-internet">Internet</label>
+                <span class="errorMessage all"><span>Please tell us.</span></span>
+
+            <p>
+                <a class="Button Submit" href="#">Submit</a>
+                <a class="Button StartOver" href="#">Start Over</a>
+                <a class="Button Reset" href="#">Reset</a>
+
+            <p>
+                <a class="Button LogValues" href="#">Log Values</a>
+                <a class="Button LogChanges" href="#">Log Changes</a>
+
+            <p>
+                <a class="Button Enable" href="#">Enable</a>
+                <a class="Button Disable" href="#">Disable</a>
+
+            <p>
+                <a class="Button ReadOnly" href="#">Read Only</a>
+                <a class="Button Editable" href="#">Editable</a>
+        </div>
+
+        <script src="js/jquery.js"></script>
+        <script src="js/event-handler.js"></script>
+        <script src="../form-handler.js"></script>
+        <script src="js/form-listener-plugin.js"></script>
+        <script>
+        (function () {
+            'use strict';
+
+            var $inputs = $(':input');
+
+            var fields = new FormFields($inputs.toArray());
+
+            var submit = function () {
+                var errorFields = fields.validate(true, true);
+
+                console.log(errorFields);
+
+                if (errorFields.length === 0) {
+                    fields.startOver(true);
+                    return;
+                }
+
+                errorFields[0].el.focus();
+            }
+
+            $inputs.on('keypress', function (e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    submit();
+                }
+            });
+
+            $('.Button').on('click', function (e) {
+                e.preventDefault();
+            });
+
+            $('.Submit').on('click', submit);
+
+            $('.StartOver').on('click', function () {
+                fields.startOver();
+            });
+
+            $('.Reset').on('click', function () {
+                fields.startOver(true);
+            });
+
+            $('.LogValues').on('click', function () {
+                console.log(fields.read());
+            });
+
+            $('.LogChanges').on('click', function () {
+                console.log(fields.changes());
+            });
+
+            $('.Enable').on('click', function () {
+                fields.enable();
+            });
+
+            $('.Disable').on('click', function () {
+                fields.disable();
+            });
+
+            $('.ReadOnly').on('click', function () {
+                fields.readonly();
+            });
+
+            $('.Editable').on('click', function () {
+                fields.editable();
+            });
+
+            formListener('.Wrap', fields);
+
+        }());
+        </script>
+    </body>
+</html>

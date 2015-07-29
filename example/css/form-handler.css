@@ -1,0 +1,60 @@
+
+.errorMessage {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    height: 19px;
+    padding: 0 12px;
+    max-width: 100%;
+    background: #990000;
+    border-radius: 3px 3px 3px 0;
+    color: #fff;
+    font-size: 11px;
+    line-height: 19px;
+    visibility: hidden;
+    opacity: 0;
+    transform-origin: left bottom;
+    transform: scale(.5);
+    transition: visibility .3s, opacity .3s, transform .3s;
+}
+
+    .errorMessage:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 100%;
+        height: 0;
+        width: 0;
+        border-top: 5px solid #990000;
+        border-right: 5px solid transparent;
+    }
+
+    .errorMessage span {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+[data-status~="invalid"] ~ .errorMessage.all,
+[data-status~="required"] ~ .errorMessage.required,
+[data-status~="email"] ~ .errorMessage.email,
+[data-status~="regex"] ~ .errorMessage.regex,
+[data-status~="match"] ~ .errorMessage.match {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+
+[readonly],
+[disabled] {
+    opacity: .5;
+}
+
+[data-show="false"] {
+    display: none;
+}
+
+[data-show="true"] {
+    display: block;
+}
