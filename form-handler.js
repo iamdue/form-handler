@@ -22,23 +22,23 @@ var FormFields = (function ($) {
     var fieldNumber = 0;
     var emailRE = /^\S+@\S+\.\S+$/;
 
-    var isEmpty = function (val) {
+    var isBlank = function (val) {
         return val === '';
     };
 
-    var isNotEmpty = function (val) {
-        return !isEmpty(val);
+    var isNotBlank = function (val) {
+        return !isBlank(val);
     };
 
     var validation = {
-        required: isNotEmpty,
-        empty: isEmpty,
+        required: isNotBlank,
+        blank: isBlank,
         email: function (val) {
             if (typeof val !== 'string' || val.length === 0) return true;
             return emailRE.test(val);
         },
-        checked: isNotEmpty,
-        unchecked: isEmpty
+        checked: isNotBlank,
+        unchecked: isBlank
     };
 
     var validate = function () {
@@ -372,7 +372,11 @@ var FormFields = (function ($) {
         createRadioGroups.call(this);
     };
 
-    eventHandler(Fields);
+    if (typeof eventHandler === 'function') {
+        eventHandler(Fields);
+    } else {
+        Fields.prototype.emit = function () {};
+    }
 
     Fields.prototype.getValue = getValue;
 

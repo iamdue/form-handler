@@ -73,6 +73,14 @@
                 <span class="errorMessage email"><span>A valid email name is required</span></span>
 
             <p>
+                <input name="number" type="text" class="textbox" placeholder="Number" title="Number" data-regex="^[0-9]*$">
+                <span class="errorMessage all"><span>This needs to be a number</span></span>
+
+            <p>
+                <input name="weekday" type="text" class="textbox" placeholder="Weekday" title="Weekday" data-regex="^(sunday|monday|tuesday|wednesday|thursday|friday|saturday)$" data-regex-flags="i">
+                <span class="errorMessage all"><span>This needs to be a weekday</span></span>
+
+            <p>
                 <select name="age" data-validation="required">
                     <option value="">Choose your age...</option>
                     <option>1-10</option>
@@ -115,6 +123,7 @@
             <p>
                 <a class="Button ReadOnly" href="#">Read Only</a>
                 <a class="Button Editable" href="#">Editable</a>
+
         </div>
 
         <script src="js/jquery.js"></script>
