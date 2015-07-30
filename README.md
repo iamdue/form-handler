@@ -3,6 +3,7 @@ form-handler
 
 Give this constructor a set of form field elements and it will allow you to run valiadation, read the values, enable, disable, reset, and more.
 
+
 To get started
 --------------
 
@@ -14,6 +15,7 @@ To get started
 ```js
 var fields = new FormFields($(':input').toArray());
 ```
+
 
 Customizing
 -----------
@@ -36,13 +38,15 @@ List of validation options:
 * checked
 * unchecked
 
+*required and blank are essentially the same thing as checked and unchecked. a checkbox's values can only be 'on' and ''.
+
 Use the regex attribute for more control.
 
 ```html
 // limit to only numbers
 <input name="age" type="text" data-regex="^[0-9]*$">
 
-// must contain a weekday
+// must contain a weekday (of course, this should be a `select`)
 <input name="weekday" type="text" data-regex="^(sunday|monday|tuesday|wednesday|thursday|friday|saturday)$" data-regex-flags="i">
 ```
 
@@ -54,6 +58,7 @@ Force an input to match another.
 ```
 
 Works on `select`, `type="checkbox"`, and `type="radio"`. For radio groups, apply the data attributes to the first radio element.
+
 
 API
 ---
@@ -117,3 +122,45 @@ List of methods on field instance `email`:
 * enable()
 * readonly()
 * editable()
+
+
+Validation
+----------
+
+All validation is reflected on the field element on the `data-status` attribute.
+
+Before the user has changed any values.
+
+```html
+<input name="name" type="text" data-validation="required" data-status="pristine">
+```
+
+After the user has updated the field.
+
+```html
+<input name="name" type="text" data-validation="required" value="Brian" data-status="valid">
+```
+
+If "Brian" is removed or `validation(true)` is called before user input...
+
+```html
+<input name="name" type="text" data-validation="required" value="" data-status="invalid required">
+```
+
+The types of validation errors are always listed after "invalid".
+
+```html
+<input name="confirm-email" type="text" data-validation="required email" data-match="email" data-regex="^{5,30}$" value="" data-status="invalid required email match regex">
+```
+
+Use `data-status` to style the input. An easy way to add error messages is to use this CSS:
+
+```css
+[data-status~="invalid"] ~ .errorMessage.all,
+[data-status~="required"] ~ .errorMessage.required,
+[data-status~="email"] ~ .errorMessage.email,
+[data-status~="regex"] ~ .errorMessage.regex,
+[data-status~="match"] ~ .errorMessage.match {
+    visibility: visible;
+}
+```
