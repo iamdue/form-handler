@@ -1,10 +1,10 @@
 /*!
  * form-handler
- * version: 1.1.0
+ * version: 1.1.1
  * https://stash.c2mpg.com:8443/projects/C2/repos/form-handler
  */
 
-/* global eventHandler */
+/* global eventHandler, console */
 
 /* exported FormFields */
 
@@ -193,7 +193,7 @@ var FormFields = (function ($) {
         disable: disableField,
         enable: enableField,
         readonly: readonlyField,
-        editable: editableField,
+        editable: editableField
     };
 
     var ignoreKeys = [
@@ -313,7 +313,7 @@ var FormFields = (function ($) {
         this.radioElements[name].push(el);
     };
 
-    var createRadioGroups = function (el) {
+    var createRadioGroups = function () {
         Object.keys(this.radioElements).forEach(function (name) {
             var field = new Radio(this.radioElements[name], this);
 
