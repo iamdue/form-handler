@@ -7,10 +7,24 @@ Give this constructor a set of form field elements and it will allow you to run 
 To get started
 --------------
 
-### dependencies
+### CommonJS
 
-* jQuery
-* event-handler (Optional. For the form-listener-plugin in the example.)
+```
+$ npm install form-handler
+```
+
+```js
+var FormFields = require('form-handler');
+```
+
+### Browser Global
+
+```html
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="standalone/form-handler.js"></script>
+```
+
+### Initialize
 
 ```js
 var fields = new FormFields($(':input').toArray());
@@ -164,3 +178,9 @@ Use `data-status` to style the input. An easy way to add error messages is to us
     visibility: visible;
 }
 ```
+
+
+License
+-------
+
+MIT © [The C2 Group](https://c2experience.com)

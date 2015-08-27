@@ -1,0 +1,24 @@
+{
+  "name": "form-handler",
+  "version": "2.0.0",
+  "description": "Validate, read, and reset form fields.",
+  "main": "form-handler.js",
+  "scripts": {
+    "standalone": "browserify form-handler.js --outfile standalone/form-handler.js --standalone FormFields --exclude jquery",
+    "dist": "uglifyjs standalone/form-handler.js --output standalone/form-handler.min.js --comments"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TheC2Group/form-handler.git"
+  },
+  "keywords": [
+    "form fields",
+    "form validation"
+  ],
+  "author": "The C2 Group",
+  "license": "MIT",
+  "dependencies": {
+    "c2-event-handler": "^2.3.1",
+    "jquery": "^2.1.4"
+  }
+}

@@ -39,9 +39,9 @@ var formListener = (function ($) {
             });
         });
 
-        $context.find('[' + attr.toggleEnable + ']').each(function () {
+        $context.find('[' + attrs.toggleEnable + ']').each(function () {
             var $el = $(this);
-            var attr = $el.attr(attr.toggleEnable).split(':');
+            var attr = $el.attr(attrs.toggleEnable).split(':');
             var inputName = attr[0];
             var expectedValue = attr[1];
 
