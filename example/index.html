@@ -130,90 +130,77 @@
                 <a class="Button ReadOnly" href="#">Read Only</a>
                 <a class="Button Editable" href="#">Editable</a>
 
-            <p>
-                <textarea class="Output"></textarea>
         </div>
 
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="../standalone/form-handler.min.js"></script>
         <script src="js/form-listener-plugin.js"></script>
         <script>
-        (function () {
-            'use strict';
+        'use strict';
 
-            var $inputs = $(':input').not('.Output');
-            var $output = $('.Output');
+        var $inputs = $(':input');
 
-            var fields = new FormFields($inputs.toArray());
+        var fields = new FormFields($inputs.toArray());
 
-            function output(log) {
-                if (typeof log === 'object') {
-                    log = JSON.stringify(log);
-                }
-                $output.val(log);
-            }
+        function submit() {
+            var errorFields = fields.validate(true, true);
 
-            function submit() {
-                var errorFields = fields.validate(true, true);
+            console.log(errorFields);
 
-                output(errorFields);
-
-                if (errorFields.length === 0) {
-                    fields.startOver(true);
-                    return;
-                }
-
-                errorFields[0].el.focus();
-            }
-
-            $inputs.on('keypress', function (e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                    submit();
-                }
-            });
-
-            $('.Button').on('click', function (e) {
-                e.preventDefault();
-            });
-
-            $('.Submit').on('click', submit);
-
-            $('.StartOver').on('click', function () {
-                fields.startOver();
-            });
-
-            $('.Reset').on('click', function () {
+            if (errorFields.length === 0) {
                 fields.startOver(true);
-            });
+                return;
+            }
 
-            $('.LogValues').on('click', function () {
-                output(fields.read());
-            });
+            errorFields[0].el.focus();
+        }
 
-            $('.LogChanges').on('click', function () {
-                output(fields.changes());
-            });
+        $inputs.on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                submit();
+            }
+        });
 
-            $('.Enable').on('click', function () {
-                fields.enable();
-            });
+        $('.Button').on('click', function (e) {
+            e.preventDefault();
+        });
 
-            $('.Disable').on('click', function () {
-                fields.disable();
-            });
+        $('.Submit').on('click', submit);
 
-            $('.ReadOnly').on('click', function () {
-                fields.readonly();
-            });
+        $('.StartOver').on('click', function () {
+            fields.startOver();
+        });
 
-            $('.Editable').on('click', function () {
-                fields.editable();
-            });
+        $('.Reset').on('click', function () {
+            fields.startOver(true);
+        });
 
-            formListener('.Wrap', fields);
+        $('.LogValues').on('click', function () {
+            console.log(fields.read());
+        });
 
-        }());
+        $('.LogChanges').on('click', function () {
+            console.log(fields.changes());
+        });
+
+        $('.Enable').on('click', function () {
+            fields.enable();
+        });
+
+        $('.Disable').on('click', function () {
+            fields.disable();
+        });
+
+        $('.ReadOnly').on('click', function () {
+            fields.readonly();
+        });
+
+        $('.Editable').on('click', function () {
+            fields.editable();
+        });
+
+        formListener('.Wrap', fields);
         </script>
     </body>
 </html>
