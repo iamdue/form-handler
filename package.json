@@ -4,12 +4,13 @@
   "description": "Validate, read, and reset form fields.",
   "main": "form-handler.js",
   "scripts": {
+    "test": "mocha",
     "standalone": "browserify form-handler.js --outfile standalone/form-handler.js --standalone FormFields --exclude jquery",
     "dist": "uglifyjs standalone/form-handler.js --output standalone/form-handler.min.js --comments"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:TheC2Group/form-handler.git"
+    "url": "git+ssh://git@github.com/TheC2Group/form-handler.git"
   },
   "keywords": [
     "form fields",
@@ -24,5 +25,13 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "nightmare": "^2.0.6"
+  },
+  "bugs": {
+    "url": "https://github.com/TheC2Group/form-handler/issues"
+  },
+  "homepage": "https://github.com/TheC2Group/form-handler#readme",
+  "directories": {
+    "example": "example",
+    "test": "test"
   }
 }
