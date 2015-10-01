@@ -52,6 +52,12 @@
                 .Button:focus {
                     background: #333;
                 }
+
+            .Output {
+                box-sizing: border-box;
+                width: 100%;
+                height: 100px;
+            }
         </style>
     </head>
     <body>
@@ -59,9 +65,9 @@
         <div class="Wrap">
 
             <p>
-                <input name="name" type="text" class="textbox" placeholder="Name" title="Name" data-validation="required" data-regex="^.{0,50}$">
+                <input name="name" type="text" class="textbox" placeholder="Name" title="Name" data-validation="required" data-regex="^.{0,15}$">
                 <span class="errorMessage required"><span>A full name is required</span></span>
-                <span class="errorMessage regex"><span>Please use less than 50 Characters.</span></span>
+                <span class="errorMessage regex"><span>Please use less than 15 Characters.</span></span>
 
             <p>
                 <input name="confirm-name" type="text" class="textbox" placeholder="Confirm Name" title="Confirm Name" data-match="name">
@@ -124,6 +130,8 @@
                 <a class="Button ReadOnly" href="#">Read Only</a>
                 <a class="Button Editable" href="#">Editable</a>
 
+            <p>
+                <textarea class="Output"></textarea>
         </div>
 
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -134,13 +142,21 @@
             'use strict';
 
             var $inputs = $(':input');
+            var $output = $('.Output');
 
             var fields = new FormFields($inputs.toArray());
 
-            var submit = function () {
+            function output(log) {
+                if (typeof log === 'object') {
+                    log = JSON.stringify(log);
+                }
+                $output.val(log);
+            }
+
+            function submit() {
                 var errorFields = fields.validate(true, true);
 
-                console.log(errorFields);
+                output(errorFields);
 
                 if (errorFields.length === 0) {
                     fields.startOver(true);
@@ -172,11 +188,11 @@
             });
 
             $('.LogValues').on('click', function () {
-                console.log(fields.read());
+                output(fields.read());
             });
 
             $('.LogChanges').on('click', function () {
-                console.log(fields.changes());
+                output(fields.changes());
             });
 
             $('.Enable').on('click', function () {
