@@ -22,8 +22,8 @@ describe('Form Handler', function () {
         nightmare = Nightmare();
     });
 
-    afterEach(function() {
-        return nightmare.end();
+    afterEach(function(done) {
+        nightmare.end(done);
     });
 
     it('should read the values', done => {

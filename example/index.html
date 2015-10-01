@@ -141,7 +141,7 @@
         (function () {
             'use strict';
 
-            var $inputs = $(':input');
+            var $inputs = $(':input').not('.Output');
             var $output = $('.Output');
 
             var fields = new FormFields($inputs.toArray());
