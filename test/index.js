@@ -113,6 +113,22 @@ describe('Form Handler', function () {
             });
     });
 
+    it('should validate with regex', done => {
+
+        let name = 'Longfirstname Longlastname';
+
+        nightmare.goto(fixture('example'))
+            .type('input[name="name"]', name)
+            .evaluate(function () {
+                fields.validate(true, true);
+                return $('input[name="name"]').attr('data-status');
+            })
+            .then(output => {
+                output.should.equal('invalid regex');
+                done();
+            });
+    });
+
 });
 
 function fixture(path) {
