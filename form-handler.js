@@ -1,13 +1,13 @@
 /*!
  * Form Handler
  * https://github.com/TheC2Group/form-handler
- * @version 2.0.0
+ * @version 2.0.1
  * @license MIT (c) The C2 Group (c2experience.com)
  */
 
 'use strict';
 
-var $ = jQuery || require('jquery');
+var $ = require('jquery');
 var eventHandler = require('c2-event-handler');
 
 var attrs = {

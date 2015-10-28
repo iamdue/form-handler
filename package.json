@@ -1,12 +1,14 @@
 {
   "name": "form-handler",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Validate, read, and reset form fields.",
   "main": "form-handler.js",
   "scripts": {
+    "example": "browserify example/js/main.js -o example/js/bundle.js",
     "test": "mocha",
-    "standalone": "browserify form-handler.js --outfile standalone/form-handler.js --standalone FormFields --exclude jquery",
-    "dist": "uglifyjs standalone/form-handler.js --output standalone/form-handler.min.js --comments"
+    "standalone": "browserify -t [exposify --expose [ --jquery jQuery --c2-event-handler eventHandler ] ] form-handler.js --outfile standalone/form-handler.js --standalone FormFields",
+    "dist": "uglifyjs standalone/form-handler.js --output standalone/form-handler.min.js --comments",
+    "build": "npm run standalone && npm run dist"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "chai": "^3.3.0",
+    "exposify": "^0.5.0",
     "nightmare": "^2.0.6"
   },
   "bugs": {
