@@ -22,7 +22,7 @@ var FormFields = require('form-handler');
 ```html
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="TheC2Group/event-handler.js"></script>
-<script src="standalone/form-handler.js"></script>
+<script src="iife/form-handler.js"></script>
 ```
 
 ### Initialize

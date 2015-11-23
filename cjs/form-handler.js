@@ -1,16 +1,7 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.FormFields = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (global){
-/*!
- * Form Handler
- * https://github.com/TheC2Group/form-handler
- * @version 2.0.1
- * @license MIT (c) The C2 Group (c2experience.com)
- */
-
 'use strict';
 
-var $ = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
-var eventHandler = (typeof window !== "undefined" ? window['eventHandler'] : typeof global !== "undefined" ? global['eventHandler'] : null);
+var $ = require('jquery');
+var eventHandler = require('c2-event-handler');
 
 var attrs = {
     status: 'data-status',
@@ -23,18 +14,18 @@ var attrs = {
 var fieldNumber = 0;
 var emailRE = /^\S+@\S+\.\S+$/;
 
-var isBlank = function (val) {
+var isBlank = function isBlank(val) {
     return val === '';
 };
 
-var isNotBlank = function (val) {
+var isNotBlank = function isNotBlank(val) {
     return !isBlank(val);
 };
 
 var validation = {
     required: isNotBlank,
     blank: isBlank,
-    email: function (val) {
+    email: function email(val) {
         if (typeof val !== 'string' || val.length === 0) return true;
         return emailRE.test(val);
     },
@@ -42,7 +33,7 @@ var validation = {
     unchecked: isBlank
 };
 
-var validate = function () {
+var validate = function validate() {
     if (this.disabled || this.isReadonly) {
         this.fails = [];
         this.isValid = true;
@@ -62,13 +53,13 @@ var validate = function () {
         fails.push('match');
     }
     this.fails = fails;
-    this.isValid = (fails.length === 0);
+    this.isValid = fails.length === 0;
 };
 
-var update = function () {
+var update = function update() {
     var status = 'pristine';
     if (!this.isPristine) {
-        status = (this.isValid) ? 'valid' : 'invalid ' + this.fails.join(' ');
+        status = this.isValid ? 'valid' : 'invalid ' + this.fails.join(' ');
     }
 
     if (status !== this.status) {
@@ -77,7 +68,7 @@ var update = function () {
     }
 };
 
-var refreshField = function () {
+var refreshField = function refreshField() {
     if (this.type === 'checkbox') {
         this.value = this.$el.prop('checked') ? 'on' : '';
         return;
@@ -93,7 +84,7 @@ var refreshField = function () {
     this.value = this.$el.val();
 };
 
-var validateField = function (dirty) {
+var validateField = function validateField(dirty) {
     if (dirty) {
         this.isPristine = false;
     }
@@ -101,7 +92,7 @@ var validateField = function (dirty) {
     update.call(this);
 };
 
-var getFieldValue = function (refresh) {
+var getFieldValue = function getFieldValue(refresh) {
     if (this.disabled) return '';
     if (refresh) {
         refreshField.call(this);
@@ -109,13 +100,13 @@ var getFieldValue = function (refresh) {
     return this.value;
 };
 
-var setFieldValue = function (value) {
+var setFieldValue = function setFieldValue(value) {
     if (this.value === value) return;
     if (this.type === 'checkbox') {
         this.$el.prop('checked', value);
-    } else if(this.type === 'radio') {
+    } else if (this.type === 'radio') {
         this.els.forEach(function (el) {
-            el.checked = (el.value === value);
+            el.checked = el.value === value;
         }, this);
     } else {
         this.$el.val(value);
@@ -124,19 +115,19 @@ var setFieldValue = function (value) {
     this.form.emit('change:' + this.name, this.value);
 };
 
-var disableField = function () {
+var disableField = function disableField() {
     this.$el.prop('disabled', true);
     this.disabled = true;
     validate.call(this);
     update.call(this);
 };
 
-var enableField = function () {
+var enableField = function enableField() {
     this.$el.prop('disabled', false);
     this.disabled = false;
 };
 
-var readonlyField = function () {
+var readonlyField = function readonlyField() {
     this.isReadonly = true;
     if (this.type === 'select' || this.type === 'radio') {
         this.$el.attr('readonly', 'true');
@@ -147,7 +138,7 @@ var readonlyField = function () {
     update.call(this);
 };
 
-var editableField = function () {
+var editableField = function editableField() {
     this.isReadonly = false;
     if (this.type === 'select' || this.type === 'radio') {
         this.$el.removeAttr('readonly');
@@ -156,7 +147,7 @@ var editableField = function () {
     this.$el.prop('readonly', false);
 };
 
-var fieldMixin = function (field, form) {
+var fieldMixin = function fieldMixin(field, form) {
     var $el = $(field);
     var validation = $el.attr(attrs.validation);
     var regex = $el.attr(attrs.regex);
@@ -178,7 +169,7 @@ var fieldMixin = function (field, form) {
     getFieldValue.call(this, true);
     this.original = this.value;
     this.validation = validation ? validation.split(' ') : [];
-    this.regex = (regex) ? new RegExp(regex, regexFlags) : null;
+    this.regex = regex ? new RegExp(regex, regexFlags) : null;
     this.match = $el.attr(attrs.match);
     this.isPristine = true;
     validate.call(this);
@@ -197,21 +188,20 @@ var fieldProto = {
     editable: editableField
 };
 
-var ignoreKeys = [
-    16, // shift
-    17, // control
-    18, // alt
-    19, // pause/break
-    20, // caps lock
-    33, // page up
-    34, // page down
-    35, // end
-    36, // home
-    37, // left arrow
-    39  // right arrow
+var ignoreKeys = [16, // shift
+17, // control
+18, // alt
+19, // pause/break
+20, // caps lock
+33, // page up
+34, // page down
+35, // end
+36, // home
+37, // left arrow
+39 // right arrow
 ];
 
-var textKeyup = function (e) {
+var textKeyup = function textKeyup(e) {
     if (ignoreKeys.indexOf(e.which) > -1) return;
     this.value = this.$el.val();
     validate.call(this);
@@ -219,7 +209,7 @@ var textKeyup = function (e) {
     this.form.emit('change:' + this.name, this.value);
 };
 
-var textBlur = function () {
+var textBlur = function textBlur() {
     this.value = this.$el.val();
     if (this.original !== this.value) {
         this.isPristine = false;
@@ -229,7 +219,7 @@ var textBlur = function () {
     this.form.emit('change:' + this.name, this.value);
 };
 
-var TextField = function (field, form) {
+var TextField = function TextField(field, form) {
     this.type = 'input';
     fieldMixin.call(this, field, form);
     this.$el.on('keyup', textKeyup.bind(this));
@@ -238,7 +228,7 @@ var TextField = function (field, form) {
 
 $.extend(TextField.prototype, fieldProto);
 
-var onChange = function () {
+var onChange = function onChange() {
     if (this.disabled || this.isReadonly) return;
     this.value = getFieldValue.call(this, true);
     this.isPristine = false;
@@ -247,7 +237,7 @@ var onChange = function () {
     this.form.emit('change:' + this.name, this.value);
 };
 
-var Select = function (field, form) {
+var Select = function Select(field, form) {
     this.type = 'select';
     fieldMixin.call(this, field, form);
     this.$el.on('change', onChange.bind(this));
@@ -255,7 +245,7 @@ var Select = function (field, form) {
 
 $.extend(Select.prototype, fieldProto);
 
-var Checkbox = function (field, form) {
+var Checkbox = function Checkbox(field, form) {
     this.type = 'checkbox';
     fieldMixin.call(this, field, form);
     this.$el.on('change', onChange.bind(this));
@@ -263,7 +253,7 @@ var Checkbox = function (field, form) {
 
 $.extend(Checkbox.prototype, fieldProto);
 
-var Radio = function (fields, form) {
+var Radio = function Radio(fields, form) {
     this.type = 'radio';
     fieldMixin.call(this, fields, form);
     this.$el.on('change', onChange.bind(this));
@@ -271,7 +261,7 @@ var Radio = function (fields, form) {
 
 $.extend(Radio.prototype, fieldProto);
 
-var getValue = function (name, refresh) {
+var getValue = function getValue(name, refresh) {
     var field = this.field[name];
     if (!field) {
         return null;
@@ -279,7 +269,7 @@ var getValue = function (name, refresh) {
     return field.getValue(refresh);
 };
 
-var createTextField = function (el) {
+var createTextField = function createTextField(el) {
     var field = new TextField(el, this);
 
     this.texts.push(field);
@@ -287,7 +277,7 @@ var createTextField = function (el) {
     this.field[field.name] = field;
 };
 
-var createSelect = function (el) {
+var createSelect = function createSelect(el) {
     var field = new Select(el, this);
 
     this.selects.push(field);
@@ -295,7 +285,7 @@ var createSelect = function (el) {
     this.field[field.name] = field;
 };
 
-var createCheckbox = function (el) {
+var createCheckbox = function createCheckbox(el) {
     var field = new Checkbox(el, this);
 
     this.checkboxes.push(field);
@@ -303,7 +293,7 @@ var createCheckbox = function (el) {
     this.field[field.name] = field;
 };
 
-var createRadio = function (el) {
+var createRadio = function createRadio(el) {
     var name = el.name;
     if (!name.length) return;
 
@@ -314,7 +304,7 @@ var createRadio = function (el) {
     this.radioElements[name].push(el);
 };
 
-var createRadioGroups = function () {
+var createRadioGroups = function createRadioGroups() {
     Object.keys(this.radioElements).forEach(function (name) {
         var field = new Radio(this.radioElements[name], this);
 
@@ -324,7 +314,7 @@ var createRadioGroups = function () {
     }, this);
 };
 
-var categorize = function (field) {
+var categorize = function categorize(field) {
 
     if (field.tagName === 'INPUT') {
 
@@ -355,7 +345,7 @@ var categorize = function (field) {
     }
 };
 
-var Fields = function (fields) {
+var Fields = function Fields(fields) {
     if (!Array.isArray(fields)) {
         console.error('The first FormFields param needs to be an array.');
         return;
@@ -459,7 +449,3 @@ $(document).on('focus mousedown mouseup click change', 'select[readonly], input[
 });
 
 module.exports = Fields;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1])(1)
-});

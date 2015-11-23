@@ -1,14 +1,7 @@
-/*!
- * Form Handler
- * https://github.com/TheC2Group/form-handler
- * @version 2.0.1
- * @license MIT (c) The C2 Group (c2experience.com)
- */
-
 'use strict';
 
-var $ = require('jquery');
-var eventHandler = require('c2-event-handler');
+import * as $ from 'jquery';
+import * as eventHandler from 'c2-event-handler';
 
 var attrs = {
     status: 'data-status',
@@ -456,4 +449,4 @@ $(document).on('focus mousedown mouseup click change', 'select[readonly], input[
     e.preventDefault();
 });
 
-module.exports = Fields;
+export default Fields;
